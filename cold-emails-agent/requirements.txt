@@ -1,0 +1,12 @@
+# OpenAI Agents SDK
+openai-agents>=0.0.15
+
+# OpenAI SDK (for types)
+openai>=1.68.2
+
+# Environment variables
+python-dotenv>=1.0.1
+
+# Email sending
+sendgrid>=6.11.0
+
