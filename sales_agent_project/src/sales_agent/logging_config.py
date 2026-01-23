@@ -1,19 +1,3 @@
-"""
-Logging configuration for the Sales Agent system.
-
-WHY proper logging matters:
-- Print statements can't be filtered by severity
-- Print statements can't be easily redirected to files
-- Print statements don't include timestamps, source location, etc.
-- Logging can be configured differently for dev/prod environments
-
-HOW Python logging works:
-- Loggers form a hierarchy (sales_agent.tools.email inherits from sales_agent)
-- Handlers determine WHERE logs go (console, file, external service)
-- Formatters determine HOW logs look
-- Levels filter WHAT gets logged (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-"""
-
 import logging
 import sys
 from typing import Optional

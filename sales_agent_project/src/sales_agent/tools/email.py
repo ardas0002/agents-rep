@@ -61,17 +61,6 @@ class EmailService:
         html_body: str,
         to_email: Optional[str] = None,
     ) -> EmailResult:
-        """
-        Send an HTML email.
-        
-        Args:
-            subject: Email subject line
-            html_body: HTML content of the email
-            to_email: Optional override for recipient (defaults to config)
-            
-        Returns:
-            EmailResult with status and details
-        """
         recipient = to_email or self._config.recipient_email
         
         logger.info(
@@ -101,14 +90,6 @@ class EmailService:
             return self._handle_unexpected_error(e)
     
     def _handle_response(self, response) -> EmailResult:
-        """
-        Handle SendGrid API response.
-        
-        WHY separate method:
-        - Keeps send_html_email focused on the happy path
-        - Response handling logic is encapsulated
-        - Easier to test response handling independently
-        """
         status_code = response.status_code
         
         if status_code == 202:
@@ -135,7 +116,6 @@ class EmailService:
     
     @staticmethod
     def _extract_error_body(response) -> str:
-        """Safely extract error body from response."""
         try:
             if response.body:
                 return response.body.decode("utf-8")
@@ -144,7 +124,6 @@ class EmailService:
         return "No error details available"
     
     def _handle_sendgrid_error(self, error: sendgrid.exceptions.SendGridException) -> EmailResult:
-        """Handle SendGrid-specific exceptions."""
         logger.exception("SendGrid API error occurred")
         return EmailResult(
             status=EmailStatus.ERROR,
@@ -154,7 +133,6 @@ class EmailService:
         )
     
     def _handle_unexpected_error(self, error: Exception) -> EmailResult:
-        """Handle unexpected exceptions."""
         logger.exception("Unexpected error while sending email")
         return EmailResult(
             status=EmailStatus.ERROR,
@@ -168,32 +146,12 @@ _email_service: Optional[EmailService] = None
 
 
 def init_email_service(config: EmailConfig) -> None:
-    """
-    Initialize the module-level email service.
-    
-    WHY use module-level initialization:
-    - function_tool decorator doesn't support instance methods well
-    - Allows the tool function to access the configured service
-    - Alternative would be a factory pattern or dependency injection framework
-    """
     global _email_service
     _email_service = EmailService(config)
 
 
 @function_tool
 def send_html_email(subject: str, html_body: str) -> dict:
-    """
-    Send an HTML email to configured recipients.
-    
-    This is a tool function that can be used by AI agents.
-    
-    Args:
-        subject: The email subject line
-        html_body: The HTML content of the email body
-        
-    Returns:
-        Dictionary with status and details of the send operation
-    """
     if _email_service is None:
         logger.error("Email service not initialized - call init_email_service first")
         return {

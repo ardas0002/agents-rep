@@ -20,26 +20,7 @@ async def run_sales_workflow(
     message: str,
     trace_name: str = "Automated SDR",
 ) -> Optional[str]:
-    """
-    Execute the sales email workflow.
-    
-    This is the core business logic, separated from initialization
-    and error handling for clarity and testability.
-    
-    Args:
-        config: Application configuration
-        message: The instruction for the sales manager
-        trace_name: Name for the trace (for debugging/monitoring)
-        
-    Returns:
-        The final output from the agent, or None if failed
-        
-    Example:
-        result = await run_sales_workflow(
-            config,
-            "Send a cold email to the CEO of TechCorp from Alice"
-        )
-    """
+  
     init_email_service(config.email)
     
     sales_manager = create_sales_manager_agent(config.agent)
@@ -97,7 +78,11 @@ async def main(message: Optional[str] = None) -> int:
         return 1
 
 
-if __name__ == "__main__":
-    # Run the async main function
+def run():
+    """CLI entry point."""
     exit_code = asyncio.run(main())
     sys.exit(exit_code)
+
+
+if __name__ == "__main__":
+    run()
