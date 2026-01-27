@@ -1,0 +1,90 @@
+plan_learning_path:
+  description: >
+    Today's date is {today_date}.
+
+    The user wants to learn about: {topic}
+    Their current skill level: {skill_level}
+    Available time: {time_available}
+
+    IMPORTANT: Your FIRST action must be to use the "Search Learning History" tool
+    to check if the user has already studied "{topic}" or related topics!
+
+    Your job is to:
+    1. USE THE TOOL to search for "{topic}" in learning history - DO THIS FIRST!
+    2. If topic was already covered, suggest advancing to next level or related topic
+    3. Identify what prerequisites the user might need
+    4. Create a structured lesson plan for a {time_available} session
+    5. Suggest 2-3 related topics for future sessions
+
+    If the user has already learned this topic:
+    - DO NOT repeat the same content
+    - Either advance to intermediate/advanced level
+    - Or suggest a related but different topic
+
+    Consider the logical progression: What should come before this topic?
+    What naturally follows? How does this connect to previously learned material?
+  expected_output: >
+    A structured lesson plan containing:
+    - Topic overview and learning objectives (2-3 bullet points)
+    - Prerequisites check (what user should already know)
+    - Main sections to cover (3-4 sections with time estimates)
+    - Connections to previous learning (if any found in memory)
+    - Suggested follow-up topics (2-3 suggestions)
+  agent: curriculum_planner
+
+create_lesson_content:
+  description: >
+    Based on the lesson plan provided, create comprehensive lesson notes
+    for learning about {topic}.
+
+    Today's date is {today_date} - search for current, up-to-date information.
+
+    Your content should include:
+    1. Introduction - why this topic matters, real-world applications
+    2. Core concepts - clear explanations with analogies where helpful
+    3. Practical examples - working code snippets or demonstrations
+    4. Common pitfalls - mistakes to avoid, gotchas
+    5. Best practices - industry-standard approaches
+    6. Quick reference - key points summary for review
+
+    Target length: Content suitable for {time_available} of focused study.
+    Format: Use clear headings, bullet points, and code blocks.
+    Tone: Professional but approachable, like explaining to a colleague.
+  expected_output: >
+    A complete lesson document in Markdown format with:
+    - Clear section headings (##, ###)
+    - Well-formatted code examples with syntax highlighting
+    - Bullet points for key concepts
+    - Callout boxes for important notes/warnings
+    - Approximately 1500-2500 words of content
+  agent: content_creator
+  context: [plan_learning_path]
+
+generate_exercises:
+  description: >
+    Based on the lesson content about {topic}, create practical exercises
+    that reinforce the key concepts.
+
+    Create 3-5 exercises with progressive difficulty:
+    1. EASY (Warm-up): Simple task to verify basic understanding
+    2. MEDIUM (Practice): Apply concepts in a realistic scenario
+    3. MEDIUM-HARD (Challenge): Combine multiple concepts
+    4. HARD (Bonus - optional): Edge cases or advanced application
+
+    For each exercise include:
+    - Clear problem statement
+    - Input/output examples where applicable
+    - Starter code or template (if helpful)
+    - Hints (hidden/toggleable)
+    - Success criteria - how to know you've solved it correctly
+
+    Exercises should be completable within the remaining time of {time_available}.
+  expected_output: >
+    A set of 3-5 exercises in Markdown format:
+    - Each exercise clearly numbered and labeled with difficulty
+    - Problem statements that are unambiguous
+    - Code templates where appropriate
+    - Hints section for each exercise
+    - Expected output or success criteria
+  agent: exercise_generator
+  context: [create_lesson_content]

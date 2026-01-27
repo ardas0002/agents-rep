@@ -1,0 +1,22 @@
+[project]
+name = "learning_assistant"
+version = "0.1.0"
+description = "AI-powered learning assistant that creates personalized lesson notes and exercises, saves to Notion, and remembers your learning history"
+authors = [{ name = "Adrian", email = "adrian17159@gmail.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.108.0,<1.0.0",
+    "notion-client>=2.0.0",
+    "python-dotenv>=1.0.0"
+]
+
+[project.scripts]
+learning_assistant = "learning_assistant.main:run"
+run_crew = "learning_assistant.main:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
