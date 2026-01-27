@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sales_agent"
+version = "1.0.0"
+description = "AI-powered cold email generation and sending system"
+requires-python = ">=3.10"
+
+dependencies = [
+    "openai-agents",
+    "sendgrid>=6.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+sales-agent = "sales_agent.main:run"
+
+[tool.setuptools.packages.find]
+where = ["src"]
