@@ -20,6 +20,9 @@ This agent is designed to automate sending cold emails:
 - Evaluates the quality of the generated emails and improves them iteratively.
 - Currently under development, with ongoing improvements planned.
 
+### 4. Learning Assistant (Work in Progress)
+Learning Assistant is a multi-agent system that automatically generates personalized educational content. The system uses four specialized agents working in sequence - from planning your learning path, through creating content and exercises, to publishing everything to Notion.
+
 ## Future Plans
 - Add more AI agents with different capabilities.
 - Explore agent collaboration, evaluation, and autonomous decision-making.
