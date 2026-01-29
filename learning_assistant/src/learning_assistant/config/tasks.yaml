@@ -3,33 +3,38 @@ plan_learning_path:
     Today's date is {today_date}.
 
     The user wants to learn about: {topic}
-    Their current skill level: {skill_level}
     Available time: {time_available}
 
-    IMPORTANT: Your FIRST action must be to use the "Search Learning History" tool
-    to check if the user has already studied "{topic}" or related topics!
+    IMPORTANT: Your FIRST action must be to use the "Search Learned Concepts" tool
+    to check what concepts the user has already mastered in "{topic}"!
 
     Your job is to:
-    1. USE THE TOOL to search for "{topic}" in learning history - DO THIS FIRST!
-    2. If topic was already covered, suggest advancing to next level or related topic
-    3. Identify what prerequisites the user might need
-    4. Create a structured lesson plan for a {time_available} session
-    5. Suggest 2-3 related topics for future sessions
+    1. USE THE TOOL to search for learned concepts in "{topic}" - DO THIS FIRST!
+    2. Analyze which concepts the user already knows
+    3. Identify the NEXT logical concepts that build upon existing knowledge
+    4. Create a lesson plan for {time_available} covering these new concepts
+    5. List specific concepts that will be taught in this session
 
-    If the user has already learned this topic:
-    - DO NOT repeat the same content
-    - Either advance to intermediate/advanced level
-    - Or suggest a related but different topic
+    CONCEPT PROGRESSION RULES:
+    - If user has NO concepts learned: Start with foundational/basic concepts
+    - If user has basic concepts: Move to intermediate concepts that require those basics
+    - If user has intermediate concepts: Advance to complex/advanced topics
+    - NEVER repeat concepts the user already knows
+    - Each new concept should build on previously learned ones
 
-    Consider the logical progression: What should come before this topic?
-    What naturally follows? How does this connect to previously learned material?
+    Example progression for SQL:
+    - New user: SELECT, WHERE, ORDER BY (basics)
+    - After basics: JOINs, GROUP BY, HAVING (intermediate)
+    - After intermediate: Subqueries, CTEs, Window functions (advanced)
+
   expected_output: >
     A structured lesson plan containing:
-    - Topic overview and learning objectives (2-3 bullet points)
-    - Prerequisites check (what user should already know)
-    - Main sections to cover (3-4 sections with time estimates)
-    - Connections to previous learning (if any found in memory)
-    - Suggested follow-up topics (2-3 suggestions)
+    - CONCEPTS TO TEACH: List of 2-4 specific concepts for this session (REQUIRED)
+    - Prerequisites: What concepts user already knows (from tool search)
+    - Learning objectives: What user will be able to do after this lesson
+    - Main sections: 3-4 sections covering the new concepts
+    - Concept dependencies: How new concepts build on existing knowledge
+    - Next concepts: What should come in future sessions
   agent: curriculum_planner
 
 create_lesson_content:
@@ -39,24 +44,34 @@ create_lesson_content:
 
     Today's date is {today_date} - search for current, up-to-date information.
 
+    Focus on teaching the SPECIFIC CONCEPTS listed in the lesson plan.
+    Build explanations assuming the user already knows the prerequisite concepts.
+
     Your content should include:
-    1. Introduction - why this topic matters, real-world applications
-    2. Core concepts - clear explanations with analogies where helpful
-    3. Practical examples - working code snippets or demonstrations
-    4. Common pitfalls - mistakes to avoid, gotchas
+    1. Introduction - why these concepts matter, real-world applications
+    2. Core concepts - clear explanations for EACH concept from the plan
+    3. Practical examples - working code snippets demonstrating each concept
+    4. Common pitfalls - mistakes to avoid for each concept
     5. Best practices - industry-standard approaches
-    6. Quick reference - key points summary for review
+    6. Quick reference - summary of key points for each concept
 
     Target length: Content suitable for {time_available} of focused study.
-    Format: Use clear headings, bullet points, and code blocks.
+    Format: Use clear headings (## for each concept), bullet points, and code blocks.
     Tone: Professional but approachable, like explaining to a colleague.
+
   expected_output: >
     A complete lesson document in Markdown format with:
-    - Clear section headings (##, ###)
+    - Clear section headings (## for each concept being taught)
     - Well-formatted code examples with syntax highlighting
     - Bullet points for key concepts
     - Callout boxes for important notes/warnings
     - Approximately 1500-2500 words of content
+
+    IMPORTANT: At the END of the lesson, include a section:
+    ## Concepts Learned
+    - Concept 1: Brief description
+    - Concept 2: Brief description
+    (This list will be used to track learning progress)
   agent: content_creator
   context: [plan_learning_path]
 
@@ -79,6 +94,9 @@ generate_exercises:
     - Success criteria - how to know you've solved it correctly
 
     Exercises should be completable within the remaining time of {time_available}.
+
+    IMPORTANT: At the very END of your output, you MUST include a summary section
+    listing all concepts that were taught in this session.
   expected_output: >
     A set of 3-5 exercises in Markdown format:
     - Each exercise clearly numbered and labeled with difficulty
@@ -86,5 +104,11 @@ generate_exercises:
     - Code templates where appropriate
     - Hints section for each exercise
     - Expected output or success criteria
+
+    REQUIRED at the end:
+    ## Concepts Learned
+    - Concept 1: Brief description of what was taught
+    - Concept 2: Brief description of what was taught
+    (List ALL concepts from the lesson plan that were covered)
   agent: exercise_generator
   context: [create_lesson_content]

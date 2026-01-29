@@ -5,7 +5,7 @@ from crewai.memory.storage.rag_storage import RAGStorage
 from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
 from crewai_tools import SerperDevTool
 
-from learning_assistant.tools.memory_search_tool import MemorySearchTool
+from learning_assistant.tools.concept_tracker_tool import ConceptSearchTool
 
 
 @CrewBase
@@ -16,7 +16,7 @@ class LearningAssistantCrew:
         return Agent(
             config=self.agents_config['curriculum_planner'],
             verbose=True,
-            tools=[MemorySearchTool()]
+            tools=[ConceptSearchTool()]
         )
 
     @agent
